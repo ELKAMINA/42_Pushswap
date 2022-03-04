@@ -6,7 +6,7 @@
 /*   By: ael-khat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/16 17:40:38 by ael-khat          #+#    #+#             */
-/*   Updated: 2022/03/04 14:50:01 by ael-khat         ###   ########.fr       */
+/*   Updated: 2022/02/17 11:42:12 by ael-khat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ t_list	*create_a(int argc, char *argv[])
 	t_list	*current_a;
 
 	n = argc - 1;
-	if (n == 0)
-		return (NULL);
 	if (n == 1)
 	{
 		head_a = ft_lstnew((int)ft_atol(argv[1]));
@@ -64,8 +62,13 @@ t_list	*create_a(int argc, char *argv[])
 	return (head_a);
 }
 
-void	algos(t_list *head_a, t_list *head_b, int argc)
+void	algos(t_list *head_a, t_list *head_b, int argc, char *argv[])
 {
+	if (argc == 2)
+	{
+		ft_atol(argv[1]);
+		return ;
+	}
 	if (argc == 3)
 		sorting_two(&head_a);
 	else if (argc == 4)
@@ -85,21 +88,21 @@ int	main(int argc, char *argv[])
 	t_list	*head_a;
 	t_list	*head_b;
 
-	head_a = create_a(argc, argv);
-	head_b = NULL;
 	n = argc - 1;
-	if (argc == 1)
+	if (argc > 2)
 	{
-		write(2, "Error\n", 7);
-		return (0);
+		if (check_dup(argv, n) == 0 || check_char(argv) == 0
+			|| check_sp(argv) == 0 || check_dsi(argv) == 0)
+		{
+			write (2, "Error\n", 7);
+			return (0);
+		}
+		else
+		{
+			head_a = create_a(argc, argv);
+			head_b = NULL;
+			algos(head_a, head_b, argc, argv);
+		}
 	}
-	if (check_dup(argv, n) == 0 || check_char(argv) == 0
-		|| check_sp(argv) == 0 || check_dsi(argv) == 0)
-	{
-		write (2, "Error\n", 7);
-		return (0);
-	}
-	else
-		algos(head_a, head_b, argc);
 	return (0);
 }
