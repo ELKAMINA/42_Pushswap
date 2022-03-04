@@ -6,7 +6,7 @@
 /*   By: ael-khat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 17:57:15 by ael-khat          #+#    #+#             */
-/*   Updated: 2022/02/17 18:04:00 by ael-khat         ###   ########.fr       */
+/*   Updated: 2022/03/04 19:03:12 by ael-khat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	max_min_int(long nb)
 	if (nb > 2147483647)
 	{
 		write(2, "Error\n", 7);
+		write(2, "here\n", 10);
 		exit(0);
 	}
 	if (nb < -2147483648)
@@ -46,28 +47,44 @@ void	max_min_int(long nb)
 	}
 }
 
+int	skipwhite(const char *str, long *i)
+{
+	int	sign;
+
+	sign = 0;
+	while (is_charset(str[++(*i)]) == 1)
+	{
+		if (str[*i] == '-')
+			sign = 1;
+	}
+	return (sign);
+}
+
 long	ft_atol(const char	*str)
 {
 	long		i;
-	long		sign;
-	long		nb;
+	int			sign;
+	int			nb;
+	int			j;
 
-	i = 0;
-	sign = 1;
+	i = -1;
 	nb = 0;
-	while (is_charset(str[i]) == 1)
-	{
-		if (str[i] == '-')
-			sign *= -1;
-		i++;
-	}
+	sign = skipwhite(str, &i);
 	while (str[i] <= '9' && str[i] >= '0')
 	{
 		err_handling(str[i]);
-		nb = nb * 10 + (str[i] - '0');
-		i++;
+		j = 0;
+		while (++j < 10 && nb)
+		{
+			nb += (nb / j);
+			if ((nb >> 31) & 1U)
+				err();
+		}
+		nb += str[i++] - '0';
+		if ((((nb - sign) >> 31) & 1U) && nb)
+			err();
 	}
-	nb = nb * sign;
-	max_min_int(nb);
+	if (sign)
+		nb = nb * -1;
 	return (nb);
 }

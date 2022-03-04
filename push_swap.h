@@ -108,5 +108,6 @@ void	loop_nodetosend(t_list *current, t_list *copy, t_list *moving);
 void	ft_lstclear(t_list **lst);
 void	ft_lstdelone(t_list *lst, void (*del)(void*));
 size_t	ft_strlen(char *str);
+void	err(void);
 
 #endif
